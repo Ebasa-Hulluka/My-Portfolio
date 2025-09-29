@@ -144,12 +144,12 @@ section:hover {
   gap: 2rem;
   margin-top: 40px;
   margin-bottom: 40px;
-  margin-left: 32px; /* Add margin from left */
-  margin-right: 32px; /* Add margin from right */
-  padding: 40px 32px;
+  margin-left: 16px; /* smaller left margin */
+  margin-right: 16px; /* smaller right margin */
+  padding: 40px 16px; /* reduce horizontal padding */
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Stronger box shadow */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .about-img {
@@ -184,6 +184,7 @@ section:hover {
 .about-text {
   flex: 1;
   transition: color 0.3s, background 0.3s;
+  margin: 16px; /* margin on all sides, all screens */
 }
 
 .about-text p {
@@ -963,6 +964,20 @@ textarea {
   .contact-info {
     flex-direction: column;
   }
+
+  .nav-links {
+    background: transparent !important; /* fully transparent */
+    border-left: none !important; /* remove border */
+  }
+  .nav-links a {
+    color: #00c3ff !important; /* bright accent color for visibility */
+    background: rgba(0, 0, 0, 0.08); /* subtle dark background for contrast */
+    border-radius: 6px;
+  }
+  .nav-links a:hover {
+    background: rgba(0, 195, 255, 0.18);
+    color: #fff !important;
+  }
 }
 /* Add spacing between major sections */
 .portfolio {
@@ -1108,16 +1123,30 @@ textarea {
 .eba {
   font-weight: 900;
   font-size: 2rem;
-  background: linear-gradient(90deg, #ff0000, #ff9900, #00ffcc, #0066ff, #cc00ff);
+  background: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff9900,
+    #00ffcc,
+    #0066ff,
+    #cc00ff
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
+  background-size: 200% 100%;
   animation: rainbow 5s linear infinite;
 }
 
-/* Rainbow animation across text */
+/* Rainbow animation across text - CORRECTED */
 @keyframes rainbow {
-  0% { background-position: 0% 50%; }
-  50% { background-po
-
-
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

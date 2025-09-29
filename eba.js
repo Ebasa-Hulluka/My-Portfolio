@@ -1,38 +1,83 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const progressBars = document.querySelectorAll(".progress");
+// Typing animation for the home section
+document.addEventListener("DOMContentLoaded", function () {
+  // Typing animation
+  const typingElement = document.getElementById("highlight");
+  const texts = ["Full Stack Developer", "Web Designer", "Software Engineer"];
+  let textIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typingSpeed = 100;
 
-  const options = {
-    threshold: 0.3, // Trigger when 30% visible
-  };
+  function type() {
+    const currentText = texts[textIndex];
 
-  const fillBar = (entry) => {
-    if (entry.isIntersecting) {
-      const bar = entry.target;
-      const value = bar.getAttribute("data-progress");
-      bar.style.width = value + "%";
-      observer.unobserve(bar); // Animate only once
+    if (isDeleting) {
+      // Deleting text
+      typingElement.textContent = currentText.substring(0, charIndex - 1);
+      charIndex--;
+      typingSpeed = 50;
+    } else {
+      // Typing text
+      typingElement.textContent = currentText.substring(0, charIndex + 1);
+      charIndex++;
+      typingSpeed = 100;
     }
-  };
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(fillBar);
-  }, options);
+    // Check if current text is fully typed
+    if (!isDeleting && charIndex === currentText.length) {
+      // Pause at the end
+      typingSpeed = 2000;
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      // Move to next text
+      isDeleting = false;
+      textIndex++;
+      if (textIndex === texts.length) {
+        textIndex = 0;
+      }
+      typingSpeed = 500;
+    }
 
+    setTimeout(type, typingSpeed);
+  }
+
+  // Start typing animation
+  setTimeout(type, 1000);
+
+  // Progress bar animation
+  const progressBars = document.querySelectorAll(".progress");
   progressBars.forEach((bar) => {
-    observer.observe(bar);
+    const progress = bar.getAttribute("data-progress");
+    bar.style.width = progress + "%";
+  });
+
+  // Hamburger menu functionality
+  const menuToggle = document.querySelector(".menu-toggle");
+  const navLinks = document.querySelector(".nav-links");
+
+  menuToggle.addEventListener("click", function () {
+    navLinks.classList.toggle("show");
+  });
+
+  // Close menu when clicking on a link
+  const navLinksItems = document.querySelectorAll(".nav-links a");
+  navLinksItems.forEach((link) => {
+    link.addEventListener("click", function () {
+      navLinks.classList.remove("show");
+    });
+  });
+
+  // Smooth scrolling for navigation links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
   });
 });
-const highlightText = "Web Developer";
-let charIndex = 0;
-
-function typeHighlight() {
-  const element = document.getElementById("highlight");
-  if (charIndex < highlightText.length) {
-    element.textContent += highlightText.charAt(charIndex);
-    charIndex++;
-    setTimeout(typeHighlight, 150); // typing speed
-  }
-}
-
-// Start typing after page loads
-window.onload = typeHighlight;
