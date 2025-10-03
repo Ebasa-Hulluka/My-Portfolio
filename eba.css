@@ -1259,3 +1259,9 @@ body.night-mode .service2 p {
 body.dark .transparent-bg {
   background-color: rgba(0, 0, 0, 0.1); /* 90% transparent black background */
 }
+/* Night mode styles */
+.night-mode h1,
+.night-mode h2 {
+  color: white;
+  text-align: center;
+}
