@@ -1265,3 +1265,54 @@ body.dark .transparent-bg {
   color: white;
   text-align: center;
 }
+/* Progress bar base */
+.progress-bar {
+  background: #e6e6e6;
+  border-radius: 999px;
+  height: 14px;
+  overflow: hidden;
+  position: relative;
+  margin: 10px 0;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* The colored filling element */
+.progress {
+  width: 0%; /* start empty */
+  height: 100%;
+  border-radius: 999px;
+  display: block;
+  transition: width 1.4s cubic-bezier(0.37, 0.9, 0.18, 1);
+  will-change: width;
+  background: linear-gradient(90deg, #007bff 0%, #00d4ff 100%);
+}
+
+/* Percentage label (created by JS inside .progress-bar) */
+.progress-percent {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+  color: #222;
+  transition: color 0.2s ease;
+  user-select: none;
+}
+
+/* When the fill is dark enough, switch label to white for contrast */
+.progress-bar.text-inverse .progress-percent {
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+/* Small responsive tweak */
+@media (max-width: 480px) {
+  .progress-bar {
+    height: 12px;
+  }
+  .progress-percent {
+    font-size: 11px;
+  }
+}

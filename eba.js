@@ -97,3 +97,86 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+// Wrap to ensure DOM is ready if script is placed in head
+document.addEventListener("DOMContentLoaded", () => {
+  const progressEls = document.querySelectorAll(".progress");
+
+  if (!progressEls.length) return; // nothing to do
+
+  // Ensure each .progress has a data-progress attribute (0-100)
+  progressEls.forEach((p) => {
+    const parent = p.closest(".progress-bar");
+    if (!parent) return;
+
+    // create percent label if missing
+    if (!parent.querySelector(".progress-percent")) {
+      const percent = document.createElement("span");
+      percent.className = "progress-percent";
+      percent.textContent = "0%";
+      parent.appendChild(percent);
+    }
+
+    // ensure initial width is 0 (in case inline css present)
+    p.style.width = "0%";
+    p.setAttribute("aria-valuemin", "0");
+    p.setAttribute("aria-valuemax", "100");
+    const targetVal = parseInt(p.getAttribute("data-progress"), 10);
+    p.setAttribute("aria-valuenow", isNaN(targetVal) ? "0" : String(targetVal));
+  });
+
+  // animate a single bar
+  function animateBar(progressEl) {
+    const target = Math.max(
+      0,
+      Math.min(100, parseInt(progressEl.dataset.progress, 10) || 0)
+    );
+    const container = progressEl.closest(".progress-bar");
+    const label = container.querySelector(".progress-percent");
+
+    // set CSS width (this triggers the CSS transition)
+    // small timeout to ensure layout is ready
+    requestAnimationFrame(() => {
+      progressEl.style.width = target + "%";
+    });
+
+    // animate the numeric counter inside the label
+    const duration = 1200; // ms for number counter
+    const start = performance.now();
+    const startVal = 0;
+
+    function step(now) {
+      const elapsed = now - start;
+      const t = Math.min(1, elapsed / duration);
+      const eased = t; // linear for the number; CSS handles visual fill easing
+      const current = Math.round(startVal + (target - startVal) * eased);
+      label.textContent = current + "%";
+
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else {
+        label.textContent = target + "%";
+        // if the fill is more than ~50%, invert text color for readability
+        if (target >= 50) container.classList.add("text-inverse");
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Use IntersectionObserver when available
+  if ("IntersectionObserver" in window) {
+    const ioOptions = { threshold: 0.2, rootMargin: "0px 0px -80px 0px" };
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateBar(entry.target);
+          obs.unobserve(entry.target); // run once per bar
+        }
+      });
+    }, ioOptions);
+
+    progressEls.forEach((el) => observer.observe(el));
+  } else {
+    // Fallback: animate all right away
+    progressEls.forEach(animateBar);
+  }
+});
