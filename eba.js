@@ -80,4 +80,20 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+
+  // Night Mode Toggle
+  const nightToggle = document.getElementById("night-mode-toggle");
+  nightToggle.addEventListener("click", () => {
+    document.body.classList.toggle("night-mode");
+    nightToggle.classList.toggle("active");
+    // Change icon
+    const icon = nightToggle.querySelector("i");
+    if (document.body.classList.contains("night-mode")) {
+      icon.classList.remove("fa-moon");
+      icon.classList.add("fa-sun");
+    } else {
+      icon.classList.remove("fa-sun");
+      icon.classList.add("fa-moon");
+    }
+  });
 });
