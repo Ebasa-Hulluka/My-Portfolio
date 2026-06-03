@@ -22,7 +22,7 @@ header {
   z-index: 1000;
   margin-bottom: 40px;
   width: 90%;
-  margin: 0 auto 40px auto;
+  margin: 0 auto 40px  auto;
   box-shadow: 0 0 0 8px rgba(0, 195, 255, 0.12);
   border-radius: 12px;
 }
